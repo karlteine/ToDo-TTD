@@ -9,8 +9,25 @@ const createTodo = async (req, res, next) => {
 }} 
 
 const getTodos = async (req, res, next) => {
-    const allTodos = await TodoModel.find({})
-    res.status(200).json(allTodos)
+    try {
+        const allTodos = await TodoModel.find({})
+        res.status(200).json(allTodos)
+    } catch (error) {
+        next(error)
+    }
 }
 
-module.exports = {createTodo, getTodos} 
+const getTodoById = async (req, res, next) => {
+    try {
+        const todoModel = await TodoModel.findById(req.params.todoId)
+        if (todoModel) {  
+            res.status(200).json(todoModel)
+    } else {
+        res.status(404).send()
+        }   
+    } catch (error) {
+        next(error)
+    }
+}
+
+module.exports = {createTodo, getTodos, getTodoById} 
